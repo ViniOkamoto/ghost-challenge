@@ -1,0 +1,38 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/ghost_pay
+      - PORT=3000
+      - PRONTTUS_API_URL=https://api.pronttus.com.br/v1
+      - PRONTTUS_CLIENT_ID=23df939d-d050-481b-8adb-f276b62914c5
+      - PRONTTUS_CLIENT_SECRET=67fabffb4f1f8fc4d1b8ed30a1e5ea223ebeb0153bf4fb50a3ff189eb3db9068
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: ghost
+      POSTGRES_PASSWORD: ghost
+      POSTGRES_DB: ghost
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - postgres_network
+
+volumes:
+  postgres_data:
+
+networks:
+  postgres_network:
+    driver: bridge
