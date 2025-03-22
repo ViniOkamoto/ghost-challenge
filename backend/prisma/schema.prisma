@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+}
+
+enum TransactionStatus {
+  PENDING
+  APPROVED
+  CANCELLED
+  EXPIRED
+}
+
+model Transaction {
+  id            String            @id @default(uuid())
+  name          String
+  email         String
+  phone         String
+  document      String
+  amount        Int // Stored in cents
+  amountPaid    Int? // Stored in cents
+  paymentMethod PaymentMethod
+  installments  Int               @default(1)
+  status        TransactionStatus @default(PENDING)
+  providerId    String? // Stores the transactionId from the payment provider
+  pixCode       String? // Stores the Pix code from the provider
+  pixQrCode     String? // Stores the Pix QR code image data
+  expiresAt     DateTime
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@map("transactions")
+}
