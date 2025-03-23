@@ -155,6 +155,17 @@ export default function PaymentPage() {
 
   return (
     <div className="py-8 px-4">
+      {/* DEV ONLY: Button to simulate payment approval */}
+      <div className="my-4">
+        <Button
+          variant="destructive"
+          onClick={handleApprovePayment}
+          disabled={isApproving}
+          className="w-full"
+        >
+          {isApproving ? "Aprovando..." : "Simular Aprovação de Pagamento"}
+        </Button>
+      </div>
       <div className="flex justify-center mb-6">
         <GhostsPayLogo />
       </div>
@@ -201,18 +212,6 @@ export default function PaymentPage() {
       </div>
 
       <Identifier idTransacao={idTransacao} />
-
-      {/* DEV ONLY: Button to simulate payment approval */}
-      <div className="mt-8">
-        <Button
-          variant="outline"
-          onClick={handleApprovePayment}
-          disabled={isApproving}
-          className="w-full"
-        >
-          {isApproving ? "Aprovando..." : "Simular Aprovação de Pagamento"}
-        </Button>
-      </div>
     </div>
   );
 }

@@ -1,9 +1,7 @@
 "use server";
 
-import {
-  ApprovePaymentRequest,
-  PaymentStatusResponse,
-} from "@/types/approve-payment-request.type";
+import { ApprovePaymentRequest } from "@/types/approve-payment-request.type";
+import { PaymentStatusResponse } from "@/types/payment-status-response.type";
 
 /**
  * Helper to log and process API responses
