@@ -9,8 +9,6 @@
       "runtimeArgs": ["run", "start:debug"],
       "console": "integratedTerminal",
       "restart": true,
-      "protocol": "inspector",
-      "port": 9229,
       "autoAttachChildProcesses": true,
       "skipFiles": ["<node_internals>/**"]
     },

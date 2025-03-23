@@ -57,7 +57,6 @@ src/
 - **Shadcn/UI**: Componentes de UI reutilizáveis.
 - **TypeScript**: Linguagem de programação com tipagem estática.
 - **React Hook Form**: Gerenciamento de formulários.
-- **Docker**: Containerização da aplicação.
 
 ## Configuração e Instalação
 
@@ -68,7 +67,7 @@ src/
 
 ### Variáveis de Ambiente
 
-Crie um arquivo `.env.local` na raiz do projeto:
+Crie um arquivo `.env` na raiz do projeto:
 
 ```
 NEXT_PUBLIC_API_URL=http://localhost:3333
@@ -114,21 +113,4 @@ O frontend se comunica com a API GhostPay através dos endpoints:
 4. A aplicação consulta periodicamente o status do pagamento via `/payment/{id_transacao}`
 5. Quando o pagamento é aprovado, o usuário é redirecionado para a tela de conclusão
 
-## Implantação com Docker
-
-```bash
-# Construir e executar com Docker Compose
-docker-compose up -d
-```
-
 A aplicação estará disponível em `http://localhost:3000`.
-
-## Contribuição
-
-Para contribuir com o projeto:
-
-1. Faça um fork do repositório
-2. Crie uma branch para sua feature (`git checkout -b feature/nova-funcionalidade`)
-3. Faça commit das suas alterações (`git commit -m 'feat: Adicionar nova funcionalidade'`)
-4. Envie para o branch (`git push origin feature/nova-funcionalidade`)
-5. Abra um Pull Request
