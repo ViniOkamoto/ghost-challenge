@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PaymentStrategy } from './payment-strategy.interface';
 import { Transaction } from '@prisma/client';
-import { CheckoutResponseDto } from '../dto/payment-response.dto';
+import { CheckoutResponseDto } from '../dto/checkout-response.dto';
 import { CreatePaymentDto } from '../dto/create-payment.dto';
 import { TransactionRepository } from '../repositories/transaction.repository';
 

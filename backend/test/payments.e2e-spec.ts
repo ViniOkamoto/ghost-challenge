@@ -69,8 +69,8 @@ describe('Payments Flow (e2e)', () => {
       const createPaymentDto: CreatePaymentDto = {
         nome: 'Test User',
         email: 'test@example.com',
-        telefone: '1234567890',
-        cpf: '12345678901',
+        telefone: '11987654321',
+        cpf: '52998224725',
         valor: 10000,
         metodo_pagamento: 'pix',
       };
@@ -82,7 +82,7 @@ describe('Payments Flow (e2e)', () => {
 
       const responseBody = response.body as ResponseWithTransaction;
       expect(responseBody).toHaveProperty('id_transacao');
-      expect(responseBody).toHaveProperty('valor', 100); // 10000 cents converted to real
+      expect(responseBody).toHaveProperty('valor', 10000 / 100);
       expect(responseBody).toHaveProperty('pix_qr_code', 'mock-qr-code-data');
       expect(responseBody).toHaveProperty('pix_code', 'mock-pix-code');
       expect(responseBody).toHaveProperty('status', TransactionStatus.PENDING);
@@ -100,8 +100,8 @@ describe('Payments Flow (e2e)', () => {
       const createPaymentDto: CreatePaymentDto = {
         nome: 'Test User',
         email: 'test@example.com',
-        telefone: '1234567890',
-        cpf: '12345678901',
+        telefone: '11987654321',
+        cpf: '52998224725',
         valor: 10000,
         metodo_pagamento: 'pix',
       };
@@ -145,8 +145,8 @@ describe('Payments Flow (e2e)', () => {
       const createPaymentDto: CreatePaymentDto = {
         nome: 'Test User',
         email: 'test@example.com',
-        telefone: '1234567890',
-        cpf: '12345678901',
+        telefone: '11987654321',
+        cpf: '52998224725',
         valor: 10000,
         metodo_pagamento: 'pix',
       };
@@ -169,7 +169,7 @@ describe('Payments Flow (e2e)', () => {
       );
       expect(statusResponse.body).toHaveProperty('nome', 'Test User');
       expect(statusResponse.body).toHaveProperty('email', 'test@example.com');
-      expect(statusResponse.body).toHaveProperty('valor_total', 10000);
+      expect(statusResponse.body).toHaveProperty('valor_total', 10000 / 100);
       expect(statusResponse.body).toHaveProperty('metodo_pagamento', 'pix');
     });
 

@@ -12,8 +12,9 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 interface ErrorResponse {
   statusCode: number;
-  message: string;
+  message: string | string[] | Record<string, unknown>;
   timestamp: string;
+  error?: string;
 }
 
 @Catch()
@@ -26,9 +27,11 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
 
     let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-    let message: string | Map<string, unknown> = 'Internal server error';
+    let message: string | string[] | Record<string, unknown> =
+      'Internal server error';
+    let errorName: string | undefined;
     let context: string | undefined = request.url;
-    let metadata: Record<string, any> | undefined;
+    let metadata: Record<string, unknown> | undefined;
 
     // Extract the original error for logging
     let originalError: Error | undefined;
@@ -44,8 +47,31 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     } else if (exception instanceof HttpException) {
       // NestJS HTTP exceptions
       statusCode = exception.getStatus();
-      const exceptionResponse = exception.getResponse() as string;
-      message = exceptionResponse || 'Internal server error';
+      const exceptionResponse = exception.getResponse();
+
+      // Check if this is a validation error response from class-validator
+      if (typeof exceptionResponse === 'object' && exceptionResponse !== null) {
+        // For validation errors, extract the actual validation messages
+        const exceptionResponseObj = exceptionResponse as Record<
+          string,
+          unknown
+        >;
+
+        if (
+          exceptionResponseObj.message &&
+          Array.isArray(exceptionResponseObj.message)
+        ) {
+          message = exceptionResponseObj.message;
+          errorName = exceptionResponseObj.error as string;
+        } else {
+          // For other HttpExceptions, use the response directly
+          message =
+            (exceptionResponseObj.message as string) || 'Error occurred';
+          errorName = exceptionResponseObj.error as string;
+        }
+      } else if (typeof exceptionResponse === 'string') {
+        message = exceptionResponse || 'Error occurred';
+      }
     } else if (exception instanceof PrismaClientKnownRequestError) {
       // Handle Prisma errors
       statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -64,6 +90,11 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       timestamp: new Date().toISOString(),
     };
 
+    // Add error name if available
+    if (errorName) {
+      errorResponse.error = errorName;
+    }
+
     // Log the error with context information
     this.logError(exception, {
       context,
@@ -72,7 +103,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         url: request.url,
         method: request.method,
         headers: request.headers,
-        body: request.body as Record<string, any>,
+        body: request.body as Record<string, unknown>,
         query: request.query,
         params: request.params,
       },
@@ -84,7 +115,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     response.status(statusCode).json(errorResponse);
   }
 
-  private logError(exception: unknown, context: Record<string, any>): void {
+  private logError(exception: unknown, context: Record<string, unknown>): void {
     // Format the error message
     const errorMessage =
       exception instanceof Error ? exception.message : String(exception);
@@ -96,7 +127,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       `Exception occurred: ${errorMessage}`,
       stack,
       context.request && typeof context.request === 'object'
-        ? (context.request as Record<string, any>).url
+        ? (context.request as Record<string, unknown>).url
         : 'unknown-url',
     );
 

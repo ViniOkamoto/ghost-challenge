@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { Transaction, TransactionStatus } from '@prisma/client';
 import { PronttusGateway } from '../gateways/pronttus.gateway';
 import { PaymentStrategy } from './payment-strategy.interface';
-import { CheckoutResponseDto } from '../dto/payment-response.dto';
 import { CreatePaymentDto } from '../dto/create-payment.dto';
 import { TransactionRepository } from '../repositories/transaction.repository';
+import { CheckoutResponseDto } from '../dto/checkout-response.dto';
 
 @Injectable()
 export class PixPaymentStrategy implements PaymentStrategy {

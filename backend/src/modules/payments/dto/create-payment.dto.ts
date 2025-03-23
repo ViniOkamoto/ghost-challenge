@@ -9,6 +9,8 @@ import {
   Max,
   Min,
 } from 'class-validator';
+import { IsCpf } from 'src/common/validators/cpf.validator';
+import { IsPhoneNumber } from 'src/common/validators/phone.validator';
 
 enum PaymentMethod {
   PIX = 'pix',
@@ -22,18 +24,20 @@ export class CreatePaymentDto {
   nome: string;
 
   @ApiProperty({ example: 'joaoalmeida22@gmail.com' })
-  @IsEmail()
+  @IsEmail({}, { message: 'Email inválido' })
   @IsNotEmpty()
   email: string;
 
   @ApiProperty({ example: '19995424903' })
   @IsString()
   @IsNotEmpty()
+  @IsPhoneNumber({ message: 'Telefone inválido' })
   telefone: string;
 
   @ApiProperty({ example: '42446021243' })
   @IsString()
   @IsNotEmpty()
+  @IsCpf({ message: 'CPF inválido' })
   cpf: string;
 
   @ApiProperty({ example: 3050000, description: 'Value in cents' })

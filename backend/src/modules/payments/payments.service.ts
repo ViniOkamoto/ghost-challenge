@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
-import {
-  CheckoutResponseDto,
-  PaymentStatusDto,
-} from './dto/payment-response.dto';
+import { PaymentStatusDto } from './dto/payment-status.dto';
 import { PaymentMethod, TransactionStatus } from '@prisma/client';
 import { ApprovePaymentDto } from './dto/approve-payment.dto';
 import { PaymentStrategyFactory } from './strategies/payment-strategy.factory';
@@ -16,6 +13,7 @@ import {
   PaymentStatusFailedException,
 } from './errors/payment-errors';
 import { TransactionRepository } from './repositories/transaction.repository';
+import { CheckoutResponseDto } from './dto/checkout-response.dto';
 
 @Injectable()
 export class PaymentsService {
@@ -119,7 +117,7 @@ export class PaymentsService {
         email: transaction.email,
         telefone: transaction.phone,
         cpf: transaction.document,
-        valor_total: transaction.amount,
+        valor_total: transaction.amount / 100,
         valor_pago: transaction.amountPaid || 0,
         metodo_pagamento: transaction.paymentMethod.toLowerCase(),
         parcelas: transaction.installments,

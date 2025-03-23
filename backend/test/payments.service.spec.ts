@@ -53,8 +53,8 @@ describe('PaymentsService', () => {
       const createPaymentDto: CreatePaymentDto = {
         nome: 'Test User',
         email: 'test@example.com',
-        telefone: '1234567890',
-        cpf: '12345678901',
+        telefone: '11987654321',
+        cpf: '52998224725',
         valor: 10000,
         metodo_pagamento: 'pix',
         parcelas: 1,
@@ -81,7 +81,7 @@ describe('PaymentsService', () => {
 
       const mockResponse = {
         id_transacao: 'mock-id',
-        valor: 100,
+        valor: 10000 / 100,
         status: 'PENDING',
         prazo_pagamento: mockTransaction.expiresAt.toISOString(),
       };
@@ -179,8 +179,8 @@ describe('PaymentsService', () => {
         status: TransactionStatus.PENDING,
         name: 'Test User',
         email: 'test@example.com',
-        phone: '1234567890',
-        document: '12345678901',
+        phone: '11987654321',
+        document: '52998224725',
         amount: 10000,
         amountPaid: null,
         paymentMethod: PaymentMethod.PIX,
@@ -204,7 +204,7 @@ describe('PaymentsService', () => {
         email: mockTransaction.email,
         telefone: mockTransaction.phone,
         cpf: mockTransaction.document,
-        valor_total: mockTransaction.amount,
+        valor_total: mockTransaction.amount / 100,
         valor_pago: 0,
         metodo_pagamento: 'pix',
         parcelas: mockTransaction.installments,

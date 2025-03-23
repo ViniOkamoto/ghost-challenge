@@ -11,10 +11,8 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PaymentsService } from './payments.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { ApprovePaymentDto } from './dto/approve-payment.dto';
-import {
-  CheckoutResponseDto,
-  PaymentStatusDto,
-} from './dto/payment-response.dto';
+import { PaymentStatusDto } from './dto/payment-status.dto';
+import { CheckoutResponseDto } from './dto/checkout-response.dto';
 
 @ApiTags('payments')
 @Controller()
