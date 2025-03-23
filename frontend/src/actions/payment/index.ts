@@ -1,38 +1,8 @@
 "use server";
 
-import { ApprovePaymentRequest } from "@/types/approve-payment-request.type";
-import { PaymentStatusResponse } from "@/types/payment-status-response.type";
+import { ApprovePaymentRequest } from "@/models/approve-payment-request";
+import { PaymentStatusResponse } from "@/models/payment-status-response";
 
-/**
- * Helper to log and process API responses
- */
-async function processApiResponse(response: Response) {
-  // Clone the response so we can read it multiple times
-  const clonedResponse = response.clone();
-
-  // Try to parse the response body regardless of status code
-  let responseBody;
-  try {
-    responseBody = await clonedResponse.text();
-    console.log("Raw API response:", responseBody);
-
-    // Try to parse as JSON if possible
-    try {
-      responseBody = JSON.parse(responseBody);
-      console.log("Parsed API response:", responseBody);
-    } catch {
-      // Not JSON, keep as text
-    }
-  } catch (e) {
-    console.log("Could not read response body:", e);
-  }
-
-  return { response, responseBody };
-}
-
-/**
- * Server action to approve a payment
- */
 export async function approvePayment(
   transactionId: string
 ): Promise<PaymentStatusResponse> {
@@ -51,13 +21,9 @@ export async function approvePayment(
       body: JSON.stringify(payload),
     });
 
-    const { responseBody } = await processApiResponse(response);
-
     if (!response.ok) {
       throw new Error(
-        `Failed to approve payment: ${response.status} ${response.statusText}${
-          responseBody ? ` - ${JSON.stringify(responseBody)}` : ""
-        }`
+        `Failed to approve payment: ${response.status} ${response.statusText}`
       );
     }
 
@@ -68,12 +34,9 @@ export async function approvePayment(
   }
 }
 
-/**
- * Server action to get payment status
- */
 export async function getPaymentStatus(
   transactionId: string
-): Promise<PaymentStatusResponse> {
+): Promise<PaymentStatusResponse | null> {
   try {
     console.log("Getting payment status for transaction:", transactionId);
 
@@ -87,14 +50,9 @@ export async function getPaymentStatus(
       }
     );
 
-    const { responseBody } = await processApiResponse(response);
-
     if (!response.ok) {
-      throw new Error(
-        `Failed to get payment status: ${response.status} ${
-          response.statusText
-        }${responseBody ? ` - ${JSON.stringify(responseBody)}` : ""}`
-      );
+      console.error("Failed to get payment status:", response.statusText);
+      return null;
     }
 
     return await response.json();

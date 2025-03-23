@@ -7,6 +7,8 @@ import {
 } from "@/components/molecule/information-card";
 import { formatCPF, formatCurrency, formatPhone } from "@/lib/utils";
 import { Identifier } from "@/components/molecule/identifier";
+import { notFound } from "next/navigation";
+import { TransactionStatus } from "@/models/payment-status-response";
 
 export default async function ApprovedPage({
   params,
@@ -15,7 +17,28 @@ export default async function ApprovedPage({
 }) {
   const idTransacao = (await params).idTransacao;
   const paymentData = await getPaymentStatus(idTransacao);
-
+  if (!paymentData) {
+    return notFound();
+  }
+  if (paymentData.status !== TransactionStatus.APPROVED) {
+    console.log("Pagamento não aprovado:", paymentData);
+    console.log("ID da transação:", idTransacao);
+    console.log("Status:", paymentData.status);
+    return (
+      <div className="px-4 pt-8">
+        <div className="flex justify-center mb-6">
+          <GhostsPayLogo />
+        </div>
+        <div className="text-center mb-8">
+          <h1 className="text-xl font-semibold mb-2">
+            Pagamento não aprovado.
+            <br />
+            Por favor, tente novamente.
+          </h1>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="px-4 pt-8">
       <div className="flex justify-center mb-6">

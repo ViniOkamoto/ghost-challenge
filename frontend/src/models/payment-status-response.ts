@@ -1,5 +1,5 @@
 export interface PaymentStatusResponse {
-  status: string;
+  status: TransactionStatus;
   nome: string;
   email: string;
   telefone: string;
@@ -9,4 +9,11 @@ export interface PaymentStatusResponse {
   metodo_pagamento: string;
   parcelas: number;
   id_transacao: string;
+}
+
+export enum TransactionStatus {
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  CANCELLED = "CANCELLED",
+  EXPIRED = "EXPIRED",
 }

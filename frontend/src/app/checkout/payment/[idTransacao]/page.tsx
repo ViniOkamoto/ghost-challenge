@@ -9,13 +9,12 @@ import { CollapsibleInstructions } from "@/components/molecule/collapsible-instr
 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { approvePayment } from "@/actions/payment";
-import { getPaymentStatus } from "@/actions";
+import { approvePayment, getPaymentStatus } from "@/actions";
 import { PasteIcon } from "@/components/atoms/icons/paste";
 import { Identifier } from "@/components/molecule/identifier";
 import { formatCurrency } from "@/lib/utils";
-import { CheckoutResponse } from "@/types/checkout-response.type";
-
+import { CheckoutResponse } from "@/models/checkout-response";
+import { TransactionStatus } from "@/models/payment-status-response";
 export default function PaymentPage() {
   const params = useParams<{ idTransacao: string }>();
   const router = useRouter();
@@ -113,7 +112,7 @@ export default function PaymentPage() {
   }
 
   // If payment is approved, redirect to confirmation page
-  if (paymentStatus?.status === "APPROVED") {
+  if (paymentStatus?.status === TransactionStatus.APPROVED) {
     router.push(`/checkout/approved/${idTransacao}`);
     return null;
   }

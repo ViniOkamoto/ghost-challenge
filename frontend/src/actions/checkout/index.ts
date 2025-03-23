@@ -1,24 +1,18 @@
 "use server";
 
 import { CheckoutRequestData } from "@/models/checkout-request";
-import { CheckoutResponse } from "@/types/checkout-response.type";
+import { CheckoutResponse } from "@/models/checkout-response";
 
-/**
- * Server action to create a checkout
- */
 export async function createCheckout(
   data: CheckoutRequestData
 ): Promise<CheckoutResponse> {
   try {
     console.log("Sending checkout request:", JSON.stringify(data, null, 2));
 
-    // Ensure the data is properly formatted for the API
     const payload = {
       ...data,
-      // Make sure phone and CPF have no special characters
       telefone: data.telefone.replace(/\D/g, ""),
       cpf: data.cpf.replace(/\D/g, ""),
-      // Ensure valor is a number
       valor:
         typeof data.valor === "string" ? parseInt(data.valor, 10) : data.valor,
     };
