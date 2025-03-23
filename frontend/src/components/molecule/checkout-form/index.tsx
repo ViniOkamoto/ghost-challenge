@@ -1,8 +1,6 @@
 "use client";
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PaymentType } from "@/models/checkout-request";
 import { checkoutFormSchema, PaymentFormValues } from "../../../types/schema";
 import { useMutation } from "@tanstack/react-query";
 import { createCheckout } from "@/actions";
@@ -14,7 +12,7 @@ import { RadioGroup } from "@/components/ui/radio-group";
 import { FormInput } from "@/components/atoms/form-input";
 import { PaymentOption } from "@/components/molecule/payment-option";
 import { CreditCardOptions } from "@/components/molecule/credit-card-options";
-import { CheckoutRequestData } from "@/types/checkout-request.type";
+import { CheckoutRequestData, PaymentType } from "@/models/checkout-request";
 
 const PRODUCT_VALUE = 30500.0;
 const PIX_DISCOUNT_AMOUNT = 300.0;

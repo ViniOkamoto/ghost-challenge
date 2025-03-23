@@ -1,8 +1,7 @@
 import { FormControl, FormLabel } from "@/components/ui/form";
-import { PaymentType } from "@/models/checkout-request";
 import { UseFormReturn } from "react-hook-form";
 import { PaymentFormValues } from "@/types/schema";
-
+import { PaymentType } from "@/models/checkout-request";
 type CreditCardOptionsProps = {
   form: UseFormReturn<PaymentFormValues>;
   isSelected: boolean;

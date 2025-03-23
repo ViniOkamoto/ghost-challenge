@@ -1,6 +1,5 @@
-import { PaymentType } from "@/models/checkout-request";
 import { z } from "zod";
-
+import { PaymentType } from "@/models/checkout-request";
 export const checkoutFormSchema = z.object({
   name: z.string().min(3, { message: "Nome deve ter pelo menos 3 caracteres" }),
   email: z.string().email({ message: "Email inválido" }),

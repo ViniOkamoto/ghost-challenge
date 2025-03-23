@@ -1,6 +1,6 @@
 "use server";
 
-import { CheckoutRequestData } from "@/types/checkout-request.type";
+import { CheckoutRequestData } from "@/models/checkout-request";
 import { CheckoutResponse } from "@/types/checkout-response.type";
 
 /**

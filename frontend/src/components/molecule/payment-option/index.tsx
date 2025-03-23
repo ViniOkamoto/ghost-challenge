@@ -1,8 +1,7 @@
 import { RadioGroupItem } from "@/components/ui/radio-group";
 import { FormControl, FormItem, FormLabel } from "@/components/ui/form";
-import { PaymentType } from "@/models/checkout-request";
 import { ReactNode } from "react";
-
+import { PaymentType } from "@/models/checkout-request";
 export type PaymentOptionProps = {
   label: string;
   value: PaymentType;
