@@ -52,6 +52,13 @@ export default function PaymentPage() {
     enabled: !!idTransacao,
   });
 
+  // Redirect when payment is approved
+  useEffect(() => {
+    if (paymentStatus?.status === TransactionStatus.APPROVED) {
+      router.push(`/checkout/approved/${idTransacao}`);
+    }
+  }, [paymentStatus?.status, idTransacao, router]);
+
   // Copy PIX code to clipboard
   const copyPixCode = () => {
     if (checkoutData?.pix_code) {
@@ -109,12 +116,6 @@ export default function PaymentPage() {
         </div>
       </div>
     );
-  }
-
-  // If payment is approved, redirect to confirmation page
-  if (paymentStatus?.status === TransactionStatus.APPROVED) {
-    router.push(`/checkout/approved/${idTransacao}`);
-    return null;
   }
 
   // Format expiration date
