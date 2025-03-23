@@ -42,6 +42,82 @@ src/
 - **Strategies**: Implementam diferentes estratégias de processamento de pagamento.
 - **DTOs**: Garantem comunicação consistente entre as camadas.
 
+## Teste de API
+
+Para facilitar o teste da API, um arquivo de endpoints está disponível para uso com a extensão REST Client.
+
+### REST Client
+
+REST Client é uma extensão popular para VS Code que permite enviar requisições HTTP diretamente do seu editor de código. Com ela, você pode testar endpoints facilmente sem precisar de ferramentas externas como Postman ou Insomnia.
+
+### Instalação da Extensão
+
+1. Abra o VS Code
+2. Navegue até a seção de extensões (Ctrl+Shift+X ou Cmd+Shift+X no Mac)
+3. Pesquise por "REST Client"
+4. Instale a extensão desenvolvida por Huachao Mao
+
+### Usando o Arquivo endpoints.http
+
+O projeto inclui um arquivo `endpoints.http` na raiz do projeto que contém todas as requisições pré-configuradas para testar a API. Para usá-lo:
+
+1. Abra o arquivo `endpoints.http` no VS Code
+2. Você verá várias seções definindo diferentes requisições HTTP
+3. Acima de cada definição de requisição, verá um link "Send Request"
+4. Clique neste link para enviar a requisição correspondente
+
+### Endpoints Disponíveis para Teste
+
+O arquivo inclui os seguintes testes de endpoints:
+
+1. **Criar Pagamento PIX**: Cria uma nova transação de pagamento via PIX
+2. **Criar Pagamento com Cartão de Crédito**: Cria uma transação com pagamento parcelado
+3. **Consultar Status do Pagamento**: Verifica o status atual de uma transação
+4. **Aprovar Pagamento**: Simula a aprovação de um pagamento
+5. **Acessar Documentação Swagger**: Acessa a documentação interativa da API
+
+### Exemplo de Uso
+
+```http
+### 1. Criar Pagamento (Checkout) - PIX
+# @name createPaymentPix
+POST {{baseUrl}}/checkout
+Content-Type: {{contentType}}
+
+{
+  "nome": "João Silva",
+  "email": "joao.silva@example.com",
+  "telefone": "11998765432",
+  "cpf": "52998224725",
+  "valor": 50000,
+  "metodo_pagamento": "pix"
+}
+```
+
+Depois de executar esta requisição, você receberá uma resposta contendo um `id_transacao` que pode ser usado nos endpoints subsequentes para consultar ou aprovar o pagamento.
+
+### Fluxo de Teste Completo
+
+Para testar o fluxo completo de pagamento:
+
+1. Crie um pagamento usando o endpoint `/checkout`
+2. Copie o `id_transacao` da resposta
+3. Use este ID para consultar o status via `/payment/{id_transacao}`
+4. Aprove o pagamento via `/payment/approve`
+5. Consulte novamente o status para verificar se foi atualizado para `APPROVED`
+
+### Configuração de Ambiente
+
+O arquivo utiliza variáveis de ambiente para configurar a URL base e o tipo de conteúdo:
+
+```http
+### Variables
+@baseUrl = http://localhost:3333
+@contentType = application/json
+```
+
+Você pode modificar estas variáveis conforme necessário para apontar para diferentes ambientes de teste.
+
 ## Endpoints da API
 
 ### Criar Transação de Pagamento
