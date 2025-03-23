@@ -1,7 +1,10 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { checkoutFormSchema, PaymentFormValues } from "../../../types/schema";
+import {
+  checkoutFormSchema,
+  PaymentFormValues,
+} from "../../../validators/cehckout-form-schema";
 import { useMutation } from "@tanstack/react-query";
 import { createCheckout } from "@/actions";
 import { useRouter } from "next/navigation";

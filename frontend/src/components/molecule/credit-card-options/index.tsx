@@ -1,6 +1,6 @@
 import { FormControl, FormLabel } from "@/components/ui/form";
 import { UseFormReturn } from "react-hook-form";
-import { PaymentFormValues } from "@/types/schema";
+import { PaymentFormValues } from "@/validators/cehckout-form-schema";
 import { PaymentType } from "@/models/checkout-request";
 type CreditCardOptionsProps = {
   form: UseFormReturn<PaymentFormValues>;
