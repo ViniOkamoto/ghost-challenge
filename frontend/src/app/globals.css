@@ -127,15 +127,12 @@
   }
 }
 
-/* Ribbon with triangle shape - Used for discount badges
-   Creates a ribbon with a triangle shape on the right side using clip-path 
-*/
 .ribbon-container {
   clip-path: polygon(0 0, 100% 0, calc(100% - 15px) 50%, 100% 100%, 0 100%);
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
-  padding-right: 24px; /* Extra padding to account for the triangle cut */
-  width: 100%; /* Make sure the ribbon only takes the width it needs */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for depth */
+  padding-right: 24px;
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 4px 4px 4px 4px;
 }

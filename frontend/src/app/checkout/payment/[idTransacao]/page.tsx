@@ -4,42 +4,41 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import Image from "next/image";
+
 import { GhostsPayLogo } from "@/components/atoms/logo";
 import { CollapsibleInstructions } from "@/components/molecule/collapsible-instructions";
-
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import { approvePayment, getPaymentStatus } from "@/actions";
 import { PasteIcon } from "@/components/atoms/icons/paste";
 import { Identifier } from "@/components/molecule/identifier";
+
+import { approvePayment, getPaymentStatus } from "@/actions";
 import { formatCurrency } from "@/lib/utils";
 import { CheckoutResponse } from "@/models/checkout-response";
 import { TransactionStatus } from "@/models/payment-status-response";
+
 export default function PaymentPage() {
   const params = useParams<{ idTransacao: string }>();
   const router = useRouter();
+  const idTransacao = params.idTransacao;
+
   const [isCopied, setIsCopied] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
   const [checkoutData, setCheckoutData] = useState<CheckoutResponse | null>(
     null
   );
 
-  const idTransacao = params.idTransacao;
-
-  // Retrieve checkout data from sessionStorage (contains QR code)
   useEffect(() => {
     const storedData = sessionStorage.getItem("current_checkout_data");
     if (storedData) {
       try {
-        const parsedData = JSON.parse(storedData) as CheckoutResponse;
-        setCheckoutData(parsedData);
+        setCheckoutData(JSON.parse(storedData) as CheckoutResponse);
       } catch (e) {
         console.error("Error parsing checkout data:", e);
       }
     }
   }, []);
 
-  // Poll for payment status
   const {
     data: paymentStatus,
     isLoading: isStatusLoading,
@@ -48,18 +47,16 @@ export default function PaymentPage() {
   } = useQuery({
     queryKey: ["payment-status", idTransacao],
     queryFn: () => getPaymentStatus(idTransacao),
-    refetchInterval: 5000, // Poll every 5 seconds
+    refetchInterval: 5000,
     enabled: !!idTransacao,
   });
 
-  // Redirect when payment is approved
   useEffect(() => {
     if (paymentStatus?.status === TransactionStatus.APPROVED) {
       router.push(`/checkout/approved/${idTransacao}`);
     }
   }, [paymentStatus?.status, idTransacao, router]);
 
-  // Copy PIX code to clipboard
   const copyPixCode = () => {
     if (checkoutData?.pix_code) {
       navigator.clipboard.writeText(checkoutData.pix_code);
@@ -69,7 +66,6 @@ export default function PaymentPage() {
     }
   };
 
-  // Simulate payment approval
   const handleApprovePayment = async () => {
     setIsApproving(true);
     try {
@@ -84,7 +80,15 @@ export default function PaymentPage() {
     }
   };
 
-  // Show loading state if we're still fetching checkout data or payment status
+  const formatExpirationDate = (dateString?: string) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return `${date.toLocaleDateString("pt-BR")} - ${date.toLocaleTimeString(
+      "pt-BR",
+      { hour: "2-digit", minute: "2-digit" }
+    )}`;
+  };
+
   if ((isStatusLoading && !checkoutData) || (!checkoutData && !paymentStatus)) {
     return (
       <div className="max-w-md mx-auto py-8 px-4">
@@ -118,25 +122,10 @@ export default function PaymentPage() {
     );
   }
 
-  // Format expiration date
-  const formatExpirationDate = (dateString?: string) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return `${date.toLocaleDateString("pt-BR")} - ${date.toLocaleTimeString(
-      "pt-BR",
-      {
-        hour: "2-digit",
-        minute: "2-digit",
-      }
-    )}`;
-  };
-
-  // Get the payment amount to display
   const paymentAmount = checkoutData?.valor
     ? formatCurrency(checkoutData.valor)
     : "R$ 30.500,00";
 
-  // Define the steps for the collapsible instructions
   const instructionSteps = [
     {
       step: 1,
@@ -155,7 +144,6 @@ export default function PaymentPage() {
 
   return (
     <div className="py-8 px-4">
-      {/* DEV ONLY: Button to simulate payment approval */}
       <div className="my-4">
         <Button
           variant="destructive"
@@ -166,11 +154,12 @@ export default function PaymentPage() {
           {isApproving ? "Aprovando..." : "Simular Aprovação de Pagamento"}
         </Button>
       </div>
+
       <div className="flex justify-center mb-6">
         <GhostsPayLogo />
       </div>
 
-      <h1 className="font-bold text-2xl text-gray-800 text-center mb-5 ">
+      <h1 className="font-bold text-2xl text-gray-800 text-center mb-5">
         João, faça o pagamento de <br /> {paymentAmount} pelo Pix
       </h1>
 
@@ -193,7 +182,7 @@ export default function PaymentPage() {
         <PasteIcon />
       </Button>
 
-      <div className="text-center mb-4 flex flex-col ">
+      <div className="text-center mb-4 flex flex-col">
         <p className="text-gray-600 text-base">Prazo de pagamento:</p>
         <p className="text-gray-600 text-base font-bold">
           {formatExpirationDate(
@@ -203,7 +192,6 @@ export default function PaymentPage() {
         </p>
       </div>
 
-      {/* Collapsible How-to Section using the new component */}
       <div className="mb-8 w-full max-w-md mx-auto">
         <CollapsibleInstructions
           title="Como funciona?"

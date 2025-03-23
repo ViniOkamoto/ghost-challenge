@@ -21,9 +21,6 @@ export default async function ApprovedPage({
     return notFound();
   }
   if (paymentData.status !== TransactionStatus.APPROVED) {
-    console.log("Pagamento não aprovado:", paymentData);
-    console.log("ID da transação:", idTransacao);
-    console.log("Status:", paymentData.status);
     return (
       <div className="px-4 pt-8">
         <div className="flex justify-center mb-6">
