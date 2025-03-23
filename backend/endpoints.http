@@ -1,0 +1,52 @@
+### GhostPay API Endpoints Tests
+
+### Variables
+@baseUrl = http://localhost:3333
+@contentType = application/json
+
+### 1. Create Payment (Checkout) - PIX
+# @name createPaymentPix
+POST {{baseUrl}}/checkout
+Content-Type: {{contentType}}
+
+{
+  "nome": "João Silva",
+  "email": "joao.silva@example.com",
+  "telefone": "11998765432",
+  "cpf": "52998224725",
+  "valor": 50000,
+  "metodo_pagamento": "pix"
+}
+
+### 2. Create Payment (Checkout) - Credit Card
+# @name createPaymentCreditCard
+POST {{baseUrl}}/checkout
+Content-Type: {{contentType}}
+
+{
+  "nome": "Maria Oliveira",
+  "email": "maria.oliveira@example.com",
+  "telefone": "11987654321",
+  "cpf": "45474870644",
+  "valor": 1100040,
+  "metodo_pagamento": "credit_card",
+  "parcelas": 3
+}
+
+### 3. Get Payment Status
+# @name getPaymentStatus
+GET {{baseUrl}}/payment/c7c9a812-3370-4bda-9700-107ac81dc0ba
+Content-Type: {{contentType}}
+
+### 4. Approve Payment
+# @name approvePayment
+POST {{baseUrl}}/payment/approve
+Content-Type: {{contentType}}
+
+{
+  "id_transacao": "c7c9a812-3370-4bda-9700-107ac81dc0ba"
+}
+
+### 5. Get Swagger Documentation
+# @name getSwaggerDocs
+GET {{baseUrl}}/api
